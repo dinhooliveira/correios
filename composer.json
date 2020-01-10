@@ -1,5 +1,5 @@
 {
-    "name": "Adereldo/Correios",
+    "name": "adereldo/correios",
     "description": "Consulta de cep,rastreio em site do correios",
     "type": "library",
     "license": "MIT",
