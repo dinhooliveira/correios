@@ -4,6 +4,7 @@
     "type": "library",
     "license": "MIT",
     "keywords": ["correios","rastreio","cep"],
+    "minimum-stability": "dev-master",
     "authors": [
         {
             "name": "adereldoolvieira",
