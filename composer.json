@@ -3,13 +3,16 @@
     "description": "Consulta de cep,rastreio em site do correios",
     "type": "library",
     "license": "MIT",
+    "keywords": ["correios","rastreio","cep"],
     "authors": [
         {
             "name": "adereldoolvieira",
             "email": "oliveiracienciacomputacao@gmail.com"
         }
     ],
-    "require": {},
+    "require": {
+        "php": ">=5.4"
+    },
     "autoload": {
         "psr-4": {
             "MeEmpresta\\": "src/"
