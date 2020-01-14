@@ -8,7 +8,7 @@ class Correios
     private $urlCep = "http://www.buscacep.correios.com.br/sistemas/buscacep/resultadoBuscaCepEndereco.cfm";
     private $urlRastreio = "https://www2.correios.com.br/sistemas/rastreamento/resultado.cfm";
 
-    public function setVAlor($valor)
+    public function setValor($valor)
     {
         $this->valor = $valor;
     }
@@ -89,11 +89,18 @@ class Correios
             }
             $data = [];
             foreach ($table->item(0)->childNodes as $node) {
-                $registro = explode(" ", $node->getElementsByTagName("td")->item(0)->nodeValue);
+                $registro  = str_replace("  ","",$node->getElementsByTagName("td")->item(0)->nodeValue);
+                $registro = explode(" ",$registro);
+                $partesRegistro = sizeof($registro);
+                $localidade="";
+                for($i=2;$i<$partesRegistro;$i++){
+                    $localidade.= $registro[$i]." ";
+                }
+               
                 $data["data"][] = array(
                     "data" => $registro[0],
                     "hora" => $registro[1],
-                    "localidade" => $registro[10],
+                    "localidade" => $localidade,
                     "status" => $node->getElementsByTagName("td")->item(1)->nodeValue
                 );
             }

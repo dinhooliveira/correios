@@ -10,7 +10,7 @@ Busca em site do correios dados de rastreio e de endereço
 
   #BUSCANDO UM CEP#
   $correiosCep = new MeEmpresta\Correios();
-  $correiosCep->setVAlor('11111111');
+  $correiosCep->setValor('11111111');
   $dadosOBJ = $correiosCep->searchCep()->resultObject();
   $dadosArray = $correiosCep->searchCep()->resultArray();
   $dadosJSON = $correiosCep->searchCep()->resultJson();
@@ -24,7 +24,7 @@ Busca em site do correios dados de rastreio e de endereço
   
   #RASTREANDO UMA ENCOMENDA#
   $correiosRastreio = new MeEmpresta\Correios();
-  $correiosRastreio->setVAlor('seu-codigo-rastreio');
+  $correiosRastreio->setValor('seu-codigo-rastreio');
   $dadosOBJ = $correiosRastreio->rastreio()->resultObject();
   $dadosArray = $correiosRastreio->rastreio()->resultArray();
   $dadosJSON = $correiosRastreio->rastreio()->resultJson();
