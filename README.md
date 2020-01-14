@@ -2,7 +2,7 @@
 Busca em site do correios dados de rastreio e de endereço
 
 #### install
- composer require adereldo/correios:"v1.0"
+ composer require adereldo/correios:"v1.1"
 ## Exemplo
 ```PHP
 
