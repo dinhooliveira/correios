@@ -81,28 +81,32 @@ class Correios
             ));
 
             $result = file_get_contents($this->urlRastreio, null, $contexto);
-            $doc = new \DOMDocument;
+
+            $doc = new \DOMDocument();
             $doc->loadHTML($result);
-            $table = $doc->getElementsByTagName("table");
-            if (count($table) != 1) {
+            $xpath = new \DOMXpath($doc);
+            $tables = $xpath->query('//table[@class="listEvent sro"]');
+            $tabelasEncontradas = count($tables);
+            if ($tabelasEncontradas < 1) {
                 throw new \Exception("Não encontrado!");
             }
-            $data = [];
-            foreach ($table->item(0)->childNodes as $node) {
-                $registro  = str_replace("  ","",$node->getElementsByTagName("td")->item(0)->nodeValue);
-                $registro = explode(" ",$registro);
-                $partesRegistro = sizeof($registro);
-                $localidade="";
-                for($i=2;$i<$partesRegistro;$i++){
-                    $localidade.= $registro[$i]." ";
-                }
-               
-                $data["data"][] = array(
-                    "data" => $registro[0],
-                    "hora" => $registro[1],
-                    "localidade" => $localidade,
-                    "status" => $node->getElementsByTagName("td")->item(1)->nodeValue
-                );
+
+            for ($indexTable=0;$indexTable<$tabelasEncontradas;$indexTable++){
+                    foreach ($tables->item($indexTable)->childNodes as $node) {
+                        $registro  = str_replace("  ","",$node->getElementsByTagName("td")->item(0)->nodeValue);
+                        $registro = explode(" ",$registro);
+                        $partesRegistro = sizeof($registro);
+                        $localidade="";
+                        for($indexRegistro=2;$indexRegistro<$partesRegistro;$indexRegistro++){
+                            $localidade.= $registro[$indexRegistro]." ";
+                        }
+                        $data["data"][] = array(
+                            "data" => $registro[0],
+                            "hora" => $registro[1],
+                            "localidade" => $localidade,
+                            "status" => $node->getElementsByTagName("td")->item(1)->nodeValue
+                        );
+                    }
             }
 
             $data["message"] = "Encontrado com com sucesso!";
