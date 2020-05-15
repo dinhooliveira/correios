@@ -33,6 +33,7 @@ Busca em site do correios dados de rastreio e de endereço
 
  ##### RASTREANDO UMA ENCOMENDA
  ```PHP
+ <?php
   $correios = new MeEmpresta\Rastreio();
   $correios->setField('seu-codigo-rastreio');
   $dadosOBJ = $correios->run()->toObject();
@@ -58,6 +59,7 @@ stdClass Object
 
  ##### ENCONTRADO POR DESCRIÇÃO
  ```PHP
+ <?php
   $correios= new MeEmpresta\BairroLogradouro();
   $correios->setField('RUA A');
   $dadosOBJ = $correios->run()->toObject();
