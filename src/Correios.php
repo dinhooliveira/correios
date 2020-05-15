@@ -2,137 +2,31 @@
 
 namespace MeEmpresta;
 
-class Correios
+abstract class Correios implements ICorreios
 {
-    private $valor = null;
-    private $urlCep = "http://www.buscacep.correios.com.br/sistemas/buscacep/resultadoBuscaCepEndereco.cfm";
-    private $urlRastreio = "https://www2.correios.com.br/sistemas/rastreamento/resultado.cfm";
+    protected $val = null;
+    protected $url = "http://www.buscacep.correios.com.br/sistemas/buscacep/resultadoBuscaCepEndereco.cfm";
+    protected $resp = array();
 
-    public function setValor($valor)
+    abstract public function run();
+
+    public function setField($val)
     {
-        $this->valor = $valor;
+        $this->val = $val;
     }
 
-    public function searchCep()
+    public function toObject()
     {
-
-        try {
-
-            $dados = http_build_query(array(
-                'relaxation' => $this->valor,
-                'tipoCEP' => 'LOG'
-            ));
-            $contexto = stream_context_create(array(
-                'http' => array(
-                    'method' => 'POST',
-                    'content' => $dados,
-                    'header' => "Content-type: application/x-www-form-urlencoded\r\n"
-                        . "Content-Length: " . strlen($dados) . "\r\n",
-                )
-            ));
-
-            $result = file_get_contents($this->urlCep, null, $contexto);
-            $doc = new \DOMDocument;
-            $doc->loadHTML($result);
-            $table = $doc->getElementsByTagName("table");
-            if (count($table) != 1) {
-                throw new \Exception("Não encontrado!");
-            }
-            $data = [];
-            foreach ($table->item(0)->childNodes as $node) {
-                if (!empty($node->getElementsByTagName("td")->item(0))) {
-
-                    $data["data"][] = array(
-                        "logradouro" => $node->getElementsByTagName("td")->item(0)->nodeValue,
-                        "bairro" => $node->getElementsByTagName("td")->item(1)->nodeValue,
-                        "localidade" => $node->getElementsByTagName("td")->item(2)->nodeValue,
-                        "cep" => $node->getElementsByTagName("td")->item(3)->nodeValue
-                    );
-                }
-            }
-
-            $data["message"] = "Encontrado com com sucesso!";
-            $data["success"] = true;
-
-        } catch (\Exception $ex) {
-            $data["message"] = $ex->getMessage();
-        }
-
-        $this->resultado = $data;
-        return $this;
-
+        return json_decode(json_encode($this->resp));
     }
 
-    public function rastreio()
+    public function toArray()
     {
-
-        try {
-
-            $dados = http_build_query(array(
-                'objetos' => $this->valor,
-            ));
-            $contexto = stream_context_create(array(
-                'http' => array(
-                    'method' => 'POST',
-                    'content' => $dados,
-                    'header' => "Content-type: application/x-www-form-urlencoded\r\n"
-                        . "Content-Length: " . strlen($dados) . "\r\n",
-                )
-            ));
-
-            $result = file_get_contents($this->urlRastreio, null, $contexto);
-
-            $doc = new \DOMDocument();
-            $doc->loadHTML($result);
-            $xpath = new \DOMXpath($doc);
-            $tables = $xpath->query('//table[@class="listEvent sro"]');
-            $tabelasEncontradas = count($tables);
-            if ($tabelasEncontradas < 1) {
-                throw new \Exception("Não encontrado!");
-            }
-
-            for ($indexTable=0;$indexTable<$tabelasEncontradas;$indexTable++){
-                    foreach ($tables->item($indexTable)->childNodes as $node) {
-                        $registro  = str_replace("  ","",$node->getElementsByTagName("td")->item(0)->nodeValue);
-                        $registro = explode(" ",$registro);
-                        $partesRegistro = sizeof($registro);
-                        $localidade="";
-                        for($indexRegistro=2;$indexRegistro<$partesRegistro;$indexRegistro++){
-                            $localidade.= $registro[$indexRegistro]." ";
-                        }
-                        $data["data"][] = array(
-                            "data" => $registro[0],
-                            "hora" => $registro[1],
-                            "localidade" => $localidade,
-                            "status" => $node->getElementsByTagName("td")->item(1)->nodeValue
-                        );
-                    }
-            }
-
-            $data["message"] = "Encontrado com com sucesso!";
-            $data["success"] = true;
-
-        } catch (\Exception $ex) {
-            $data["message"] = $ex->getMessage();
-        }
-
-        $this->resultado = $data;
-        return $this;
-
+        return $this->resp;
     }
 
-    public function resultObject()
+    public function toJson()
     {
-        return json_decode(json_encode($this->resultado));
-    }
-
-    public function resultArray()
-    {
-        return $this->resultado;
-    }
-
-    public function resultJson()
-    {
-        return json_encode($this->resultado);
+        return json_encode($this->resp);
     }
 }
