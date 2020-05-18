@@ -22,7 +22,9 @@ Busca em site do correios dados de rastreio e de endereço
               [bairro] => Coelho Neto 
               [localidade] => Rio de Janeiro
               [uf] => RJ 
-              [cep] => 21531-710
+              [cep] => 21531-710,
+              [lat] => 
+              [lon] =>
           )
   
       [message] => Encontrado com com sucesso!
@@ -78,5 +80,36 @@ stdClass Object
   )
 ?>
 ```
+
+ ##### BUSCANDO ENDEREÇO COM LATITUDE E LONGITUDE GOOGLE MAPS
+ ```PHP
+  $correios= new MeEmpresta\Cep();
+  $correios->setField('21531710');
+  $dadosOBJ = $correios->run()->withGeo()->toObject();
+  //retorna seguinte estrutura
+  stdClass Object
+  (
+      [data] => stdClass Object
+          (
+              [logradouro] => Rua Wilson 
+              [bairro] => Coelho Neto 
+              [localidade] => Rio de Janeiro
+              [uf] => RJ 
+              [cep] => 21531-710,
+              [lat] => -22.7684959
+              [lon] =>-43.423122,14
+          )
+  
+      [message] => Encontrado com com sucesso!
+      [success] => 1
+  )
+?>
+```
+<p>caso faça o uso excessivo ou busca em uma quantidade muito grande de endereços usando a Classe BairroLogradouro  poderar  receber o seguinte erro </p>
+<code>
+failed to open stream: HTTP request failed! HTTP/1.0 429 Too Many Requests
+</code>
+<p>
+mas isso não impede o retorno dos dados de endereço apenas da latitude e longitude</p>
 
 

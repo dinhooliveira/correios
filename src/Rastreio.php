@@ -1,9 +1,19 @@
 <?php namespace MeEmpresta;
 
+/**
+ * Class Rastreio
+ * @package MeEmpresta
+ */
 class Rastreio extends Correios
 {
+    /**
+     * @var string
+     */
     protected $url = "https://www2.correios.com.br/sistemas/rastreamento/resultado.cfm";
 
+    /**
+     * @return $this
+     */
     public function run()
     {
 
@@ -68,4 +78,5 @@ class Rastreio extends Correios
         return $this;
 
     }
+
 }

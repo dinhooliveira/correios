@@ -1,7 +1,14 @@
 <?php namespace MeEmpresta;
 
-class Cep extends Correios
+/**
+ * Class Cep
+ * @package MeEmpresta
+ */
+class Cep extends CorreiosEndereco
 {
+    /**
+     * @return $this
+     */
     public function run()
     {
 
@@ -10,8 +17,6 @@ class Cep extends Correios
             if (strlen($this->val) != 8 && is_numeric($this->val)) {
                 throw new \Exception("Cep deve conter no minímo 8 caracteres numéricos Ex: 12345678");
             }
-
-
 
             $dados = http_build_query(array(
                 'relaxation' => $this->val,
@@ -45,8 +50,10 @@ class Cep extends Correios
                 "logradouro" => $td->item(0)->nodeValue,
                 "bairro" => $td->item(1)->nodeValue,
                 "localidade" => $logradouroUF[0],
-                'uf'=>$logradouroUF[1],
-                "cep" => $td->item(3)->nodeValue
+                "uf"=>$logradouroUF[1],
+                "cep" => $td->item(3)->nodeValue,
+                "lat"=>null,
+                "lon"=>null
             );
 
             $data["message"] = "Encontrado com com sucesso!";
@@ -60,5 +67,18 @@ class Cep extends Correios
         $this->resp = $data;
         return $this;
 
+    }
+
+    /**
+     * @return $this|mixed
+     */
+    public function withGeo()
+    {
+        $newAddress = $this->findGeoLocationSiteGoogleMaps($this->resp["data"]);
+        if ($newAddress) {
+            $this->resp["data"] = $newAddress;
+        }
+
+        return $this;
     }
 }

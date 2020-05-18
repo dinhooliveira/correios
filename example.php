@@ -19,7 +19,7 @@ if (!empty($_POST["valor"]) && !empty($_POST["op"])) {
         case "cep":
             $correios = new \MeEmpresta\Cep();
             $correios->setField($_POST["valor"]);
-            $data = $correios->run()->toObject();
+            $data = $correios->run()->withGeo()->toObject();
             print("<pre>");
             print_r($data);
             break;
@@ -33,7 +33,7 @@ if (!empty($_POST["valor"]) && !empty($_POST["op"])) {
         case "bairro-logradouro":
             $correios = new MeEmpresta\BairroLogradouro();
             $correios->setField($_POST["valor"]);
-            $data = $correios->run()->toObject();
+            $data = $correios->run()->withGeo()->toObject();
             print("<pre>");
             print_r($data);
             break;

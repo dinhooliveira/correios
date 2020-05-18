@@ -1,8 +1,15 @@
 <?php namespace MeEmpresta;
 
-class BairroLogradouro extends Correios
+/**
+ * Class BairroLogradouro
+ * @package MeEmpresta
+ */
+class BairroLogradouro extends CorreiosEndereco
 {
 
+    /**
+     * @return $this
+     */
     public function run()
     {
         try {
@@ -71,7 +78,9 @@ class BairroLogradouro extends Correios
                 "bairro" => $td->item(1)->nodeValue,
                 "localidade" => $logradouroUF[0],
                 'uf' => $logradouroUF[1],
-                "cep" => $td->item(3)->nodeValue
+                "cep" => $td->item(3)->nodeValue,
+                "lat"=>null,
+                'lon'=>null
             );
 
         }
@@ -91,5 +100,21 @@ class BairroLogradouro extends Correios
 
 
     }
+
+    /**
+     * @return mixed|void
+     */
+    public  function withGeo()
+    {
+        foreach ($this->resp["data"] as $key => $address) {
+            $newAddress = $this->findGeoLocationSiteGoogleMaps($address);
+            if ($newAddress) {
+                $this->resp["data"][$key] = $newAddress;
+            }
+        }
+
+        return $this;
+    }
+
 
 }
