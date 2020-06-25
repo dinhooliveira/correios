@@ -1,3 +1,12 @@
+
+[![Latest Stable Version](https://poser.pugx.org/adereldo/correios/v)](//packagist.org/packages/adereldo/correios)
+
+[![Total Downloads](https://poser.pugx.org/adereldo/correios/downloads)](//packagist.org/packages/adereldo/correios)
+
+[![Latest Unstable Version](https://poser.pugx.org/adereldo/correios/v/unstable)](//packagist.org/packages/adereldo/correios)
+
+[![Dependents](https://poser.pugx.org/adereldo/correios/dependents)](//packagist.org/packages/adereldo/correios)
+
 # correios
 Busca em site do correios dados de rastreio e de endereço
 
