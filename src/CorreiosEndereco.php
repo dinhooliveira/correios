@@ -25,7 +25,13 @@ abstract class  CorreiosEndereco extends Correios
      */
     protected function findGeoLocationSiteGoogleMaps($address)
     {
-        $result = file_get_contents("{$this->urlGoogleMapas}{$address["cep"]}", null);
+        $searchCep = $address["cep"];
+        if(strpos($searchCep,"-") == false){
+            $searchCep = $this->mask($searchCep,"#####-###");
+        }
+
+        $result = file_get_contents("{$this->urlGoogleMapas}{$searchCep}", null);
+
         if (empty($result)) {
             return false;
         }

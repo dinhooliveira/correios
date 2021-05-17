@@ -33,7 +33,7 @@ if (!empty($_POST["valor"]) && !empty($_POST["op"])) {
         case "bairro-logradouro":
             $correios = new MeEmpresta\BairroLogradouro();
             $correios->setField($_POST["valor"]);
-            $data = $correios->run()->withGeo()->toObject();
+            $data = $correios->run()->toObject();
             print("<pre>");
             print_r($data);
             break;

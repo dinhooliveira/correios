@@ -15,7 +15,9 @@ abstract class Correios implements ICorreios
     /**
      * @var string
      */
-    protected $url = "http://www.buscacep.correios.com.br/sistemas/buscacep/resultadoBuscaCepEndereco.cfm";
+    protected $urlCep = "https://buscacepinter.correios.com.br/app/cep/carrega-cep.php";
+
+    protected $urlEndereco = "https://buscacepinter.correios.com.br/app/endereco/carrega-cep-endereco.php";
     /**
      * @var array
      */
@@ -56,5 +58,24 @@ abstract class Correios implements ICorreios
     public function toJson()
     {
         return json_encode($this->resp);
+    }
+
+    public  function mask($val, $mask)
+    {
+        $maskared = '';
+        $k = 0;
+        for ($i = 0; $i <= strlen($mask) - 1; ++$i) {
+            if ($mask[$i] == '#') {
+                if (isset($val[$k])) {
+                    $maskared .= $val[$k++];
+                }
+            } else {
+                if (isset($mask[$i])) {
+                    $maskared .= $mask[$i];
+                }
+            }
+        }
+
+        return $maskared;
     }
 }
