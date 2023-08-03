@@ -13,7 +13,8 @@
     "require": {
         "php": ">=5.5",
         "ext-dom": "*",
-        "ext-libxml": "*"
+        "ext-libxml": "*",
+        "ext-curl": "*"
     },
     "autoload": {
         "psr-4": {
